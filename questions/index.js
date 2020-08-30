@@ -120,7 +120,7 @@ const calculateEnergySavings = profile => {
             case autoOff:
                 return MAX_IN_PERIOD
             default:
-              return 0
+                return 0
           }      
     }
     
@@ -136,6 +136,7 @@ const calculateEnergySavings = profile => {
                     prevEvent=event
                 }
                 //TODO: handle case where new state is off
+                
             }else{
                 prevEvent=event
             }      
@@ -147,7 +148,10 @@ const calculateEnergySavings = profile => {
     if (lastEvent.state==autoOff){
         timeSaved+=MAX_IN_PERIOD-lastEvent.timestamp
     }
-    
+    if (lastEvent.state==off && prevEvent.state==autoOff){
+        timeSaved+=MAX_IN_PERIOD-prevEvent.timestamp
+    }
+
     return timeSaved
 };
 
