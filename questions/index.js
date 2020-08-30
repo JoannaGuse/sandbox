@@ -184,6 +184,52 @@ const calculateEnergySavings = profile => {
 const isInteger = number => Number.isInteger(number);
 
 const calculateEnergyUsageForDay = (monthUsageProfile, day) => {
+    const on="on"
+    const off="off"
+   
+    // validate inputs
+    if (!isInteger(day)){
+        throw /must be an integer/
+    }
+    if ((day<1)|| (day>365)){
+        throw /day out of range/ 
+    }
+
+    // case no events
+    if (monthUsageProfile.events.length==0){
+        if (monthUsageProfile.initial==on){
+            return MAX_IN_PERIOD
+        }else {
+            return 0
+        }
+    }
+
+    // find the subset of events in the required day
+    const dayStart=(day-1)*MAX_IN_PERIOD
+    const dayEnd=day*MAX_IN_PERIOD
+    var dayprofile ={
+        initial: monthUsageProfile.initial,
+        events: [],
+    };
+
+    // we assume that the input list of events are chronologically ordered
+    for (var event of monthUsageProfile.events){
+        if (event.timestamp<dayStart){
+          // set the initial state at the start of the day
+          dayprofile.initial=event.state       
+        }else{
+            if(event.timestamp<=dayEnd){
+                event.timestamp+=-dayStart
+                dayprofile.events.push(event)
+            }else{
+                break
+            }
+        }
+    }
+    
+    usage=calculateEnergyUsageSimple(dayprofile)
+    return usage
+
 };
 
 module.exports = { calculateEnergyUsageSimple, calculateEnergySavings, calculateEnergyUsageForDay, MAX_IN_PERIOD };
