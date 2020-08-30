@@ -1,7 +1,9 @@
 /* The maximum number of minutes in a period (a day) */
 
 const MAX_IN_PERIOD = 1440;
-
+const on="on"
+const off="off"
+const autoOff="auto-off"
 /**
  * PART 1
  *
@@ -39,9 +41,7 @@ const MAX_IN_PERIOD = 1440;
 function calculateEnergyUsageSimple(profile) {
     var timeOn=0
     var prevEvent={ state: profile.initial, timestamp: 0 }
-    const on="on"
-    const off="off"
-
+ 
     //case no events
     if (profile.events.length==0){
         if (profile.initial==on){
@@ -110,9 +110,6 @@ function calculateEnergyUsageSimple(profile) {
 const calculateEnergySavings = profile => {
     var timeSaved=0
     var prevEvent={ state: profile.initial, timestamp: 0 }
-    const on="on"
-    const off="off"
-    const autoOff="auto-off"
  
      //case no events
      if (profile.events.length==0){
@@ -184,9 +181,6 @@ const calculateEnergySavings = profile => {
 const isInteger = number => Number.isInteger(number);
 
 const calculateEnergyUsageForDay = (monthUsageProfile, day) => {
-    const on="on"
-    const off="off"
-   
     // validate inputs
     if (!isInteger(day)){
         throw /must be an integer/
